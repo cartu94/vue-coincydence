@@ -1,33 +1,42 @@
 <template>
   <div>
     <h1>Home</h1>
-    <SignIn v-if="!user" />
+    <div v-if="user">Welcome, {{ user.displayName }}</div>
+    <LoadingModal v-else-if="loading" />
+    <SignIn v-else />
     <h2>{{ user != null }}</h2>
   </div>
 </template>
 
 <script>
-import { ref, onMounted, inject } from 'vue';
-import { getAuth, onAuthStateChanged } from "firebase/auth";
-import SignIn from '../components/SignIn.vue';
+import { onMounted, inject } from 'vue';
+import SignIn from '../components/SignInOverlay.vue';
+import LoadingModal from '../components/LoadingOverlay.vue';
+import { observeAuthState } from '../firebase/authService';
 
 export default {
   components: {
-    SignIn
+    SignIn,
+    LoadingModal
   },
   setup() {
     const user = inject('user');
-    const auth = inject('auth');
+    const loading = inject('loading');
 
     onMounted(() => {
-      onAuthStateChanged(auth, (user) => {
-        if (user) {
-          user.value = user;
+      loading.value = true;
+      observeAuthState((currentUser) => {
+        user.value = currentUser;
+        if (currentUser) {
+          console.log(`Logged in as: ${user.value.displayName}`);
+        } else {
+          console.log('Not logged in');
         }
+        loading.value = false;
       });
     });
 
-    return { user };
+    return { user, loading };
   }
 };
 </script>

@@ -81,3 +81,12 @@ button:focus-visible {
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root {
+  --g-blue: #3369E8;
+  --g-red: #D50F25;
+  --g-yellow: #EEB211;
+  --g-green: #009925;
+
+  font-family: 'Roboto', sans-serif;
+}
