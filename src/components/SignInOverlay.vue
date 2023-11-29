@@ -1,27 +1,9 @@
 <script setup>
-import { onMounted, inject } from "vue";
-import {
-  loginWithGoogleRedirect,
-  handleRedirectResult,
-} from "../firebase/authService";
+import { loginWithGoogleRedirect } from "../firebase/authService";
 
-const user = inject("user");
-
-const signInWithGoogle = () => {
+const signInWithGoogle = async () => {
   loginWithGoogleRedirect();
 };
-
-onMounted(async () => {
-  try {
-    const resultUser = await handleRedirectResult();
-    if (resultUser) {
-      user.value = resultUser;
-      console.log(`Logged in as: ${user.value.displayName}`);
-    }
-  } catch (error) {
-    console.error("Error during sign in:", error);
-  }
-});
 </script>
 
 <template>

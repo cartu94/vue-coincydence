@@ -21,9 +21,9 @@ const app = initializeApp(firebaseConfig);
 
 // Get Firestore and Collection
 const db = getFirestore(app);
-const collectionRef = collection(db, 'vue-coincydence');
+export const collectionRef = collection(db, 'vue-coincydence');
 
 // Get Authentication
-const auth = getAuth(app);
+export const auth = getAuth(app);
 
-export default {app, db, auth, collectionRef};
+export default app;

@@ -6,7 +6,7 @@ import firebase from './firebase'
 
 const app = createApp(App)
 
-app.use(firebase.app)
+app.use(firebase)
 app.use(router)
 
 app.mount('#app')

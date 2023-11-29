@@ -17,11 +17,12 @@
 </template>
 
 <script>
-import { onMounted, inject, ref } from 'vue';
+import { inject, ref } from 'vue';
 import SignIn from '../components/SignInOverlay.vue';
 import LoadingModal from '../components/LoadingOverlay.vue';
-import { observeAuthState } from '../firebase/authService';
+import { onAuthChange, handleRedirectResult } from '../firebase/authService';
 import { addDocument, getDocuments } from '../firebase/firestoreService';
+import { auth } from '../firebase';
 
 const documents = ref([]);
 let item = {
@@ -30,13 +31,12 @@ let item = {
   description : "lorem ipsum dolor sit amet",
   tagList : ['#test4', '#test3', '#test1'],
 }
-async function add() {
-  let it = await addDocument(item);
-  alert(`added ${it.id}`);
-}
+// async function add() {
+//   let it = await addDocument(item);
+//   alert(`added ${it.id}`);
+// }
 async function get() {
   documents.value = await getDocuments();
-  console.log(documents);
 }
 
 export default {
@@ -48,21 +48,26 @@ export default {
     const user = inject('user');
     const loading = inject('loading');
 
-    onMounted(() => {
+    onAuthChange(async () => {
       loading.value = true;
-      observeAuthState(async (currentUser) => {
-        user.value = currentUser;
-        if (currentUser) {
-          console.log(`Logged in as: ${user.value.displayName}`);
+      console.log(`Home → onAuthChange user: ${user.value}`);
+      console.log(`Home → onAuthChange currentUser: ${auth.currentUser}`);
+      try {
+        let tmpUsr = await handleRedirectResult();
+        console.log(`Home → handleRedirectResult: ${tmpUsr}`);
+        if (tmpUsr) {
+          user.value = tmpUsr.user;
           await get();
         } else {
           console.log('Not logged in');
         }
-        loading.value = false;
-      });
+      } catch (error) {
+        console.log(error);
+      }
+      loading.value = false;
     });
 
-    return { user, loading, add, get, documents };
+    return { user, loading, documents };
   }
 };
 </script>

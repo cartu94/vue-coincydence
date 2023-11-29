@@ -25,10 +25,10 @@
   .circle {
     @apply w-[20px] h-[20px] absolute rounded-full bg-[var(--g-blue)] left-[calc(50%-60px)];
     transform-origin: 50%;
-    animation: circle7124 .5s alternate infinite ease;
+    animation: bounce .5s alternate infinite ease;
   }
   
-  @keyframes circle7124 {
+  @keyframes bounce {
     0% {
       top: 60px;
       height: 5px;

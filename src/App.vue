@@ -1,23 +1,27 @@
 <script setup>
   import { provide, ref } from 'vue';
   import { logout } from './firebase/authService';
+  import { auth } from './firebase';
   
-  const user = ref(null);
+  const user = ref(auth.currentUser);
   const loading = ref(true);
 
   provide('user', user);
   provide('loading', loading);
 
   const signOut = async () => {
-    user.value = null;
-    await logout();
-  }
+    console.log('signOut');
+    console.log(`prima`,user.value);
+    user.value = await logout();
+    console.log(`dopo`,user.value);
+  };
+
 </script>
 
 <template>
   <nav>
-    <h1 v-if="user!=null"> {{`Welcome, ${user?.displayName}`}}</h1>
-    <button v-if="user!=null" @click="signOut">sign out</button>
+    <h1 v-if="user"> {{`Welcome, ${user?.displayName}`}}</h1>
+    <button v-if="user" @click="signOut">sign out</button>
     <h1 v-else>Please, sign in</h1>
   </nav>
   <router-view />
