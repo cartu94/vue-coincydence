@@ -1,8 +1,16 @@
 <script setup>
 import { loginWithGoogleRedirect } from "../firebase/authService";
+import { inject } from "vue";
+
+const user = inject("user");
 
 const signInWithGoogle = async () => {
-  loginWithGoogleRedirect();
+  try {
+    if (user.value) return;
+    await loginWithGoogleRedirect();
+  } catch (error) {
+    console.error("Error during Google sign-in", error);
+  }
 };
 </script>
 

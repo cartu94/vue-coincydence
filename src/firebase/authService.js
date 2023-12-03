@@ -2,36 +2,33 @@ import {
   GoogleAuthProvider,
   signInWithRedirect,
   onAuthStateChanged,
-  getRedirectResult
+  signOut,
 } from "firebase/auth";
 import { auth } from "./index.js";
 
 const provider = new GoogleAuthProvider();
 
-export const loginWithGoogleRedirect = () => {
-  signInWithRedirect(auth, provider);
-};
-export const handleRedirectResult = async () => {
-  return await getRedirectResult(auth)
-    .then((result) => {
-      console.log("handleRedirectResult", result);
-      return result;
-    })
-    .catch((error) => {
-      console.error("Error logging in", error);
-    });
+export const loginWithGoogleRedirect = async () => {
+  try {
+    await signInWithRedirect(auth, provider);
+  } catch (error) {
+    console.error("Error during Google sign-in redirect", error);
+    throw error;
+  }
 };
 
 export const logout = async () => {
   try {
-    return auth.signOut().then(() => {
-      return auth.currentUser;
-    });
+    await signOut(auth);
+    return auth.currentUser;
   } catch (error) {
     console.error("Error logging out", error);
+    throw error;
   }
 };
 
 export const onAuthChange = (callback) => {
-  onAuthStateChanged(auth, callback);
+  onAuthStateChanged(auth, (user) => {
+    callback(user);
+  });
 };
