@@ -80,7 +80,7 @@ export default {
 
 <style scoped>
 .card-container {
-  @apply flex justify-evenly items-center flex-wrap container mx-auto gap-8 p-4;
+  @apply flex justify-evenly items-center flex-wrap container mx-auto gap-8 px-4;
 }
 .card {
   @apply bg-transparent relative rounded-lg rounded-bl-3xl rounded-tr-3xl w-[350px] h-[350px]
@@ -104,7 +104,7 @@ export default {
   @apply bg-primary-opaque p-2 h-full;
 }
 .tag-list {
-  @apply flex flex-row gap-2 items-start flex-wrap text-white h-14 p-2 pt-0;
+  @apply flex flex-row gap-2 flex-wrap text-white h-14 px-2;
 }.description {
   @apply text-sm text-white mx-auto p-2 h-[170px] mt-1 border-t-2 border-secondary ;
 }

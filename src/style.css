@@ -21,5 +21,5 @@
 }
 
 body {
-  @apply bg-fixed bg-no-repeat bg-cover h-full pt-[140px] bg-primary;
+  @apply bg-fixed bg-no-repeat bg-cover h-full pt-[85px] bg-primary;
 }
