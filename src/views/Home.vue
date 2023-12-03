@@ -1,9 +1,11 @@
 <template>
   <div v-show="user" class="card-container">
-    <div v-for="document in documents" :key="document.id" class="card group/card">
-      <img class="group-hover/card:scale-110 group-hover/card:rotate-2 group-hover/card:cursor-pointer" :src="document.imgUrl" />
-      <div class="content group-hover/card:top-[250px]">
-        <h1>{{ document.title }}</h1>
+    <div v-for="(document, index) in documents" :key="document.id" class="card group/card"  @click="showDetails(index)">
+      <img class="group-hover/card:scale-110 group-hover/card:rotate-2 group-hover/card:cursor-pointer" :src="document.imgUrl" ref="image"/>
+      <div class="content group-hover/card:top-[255px]" ref="content">
+        <div class="title">
+          <h1>{{ document.title }}</h1>
+        </div>
         <div class="sub-content">
           <div class="tag-list">
             <p v-for="tag in document.tagList" :key="tag">{{ tag }}</p>
@@ -60,40 +62,56 @@ export default {
 
     return { user, loading, documents };
   },
+  methods: {
+    showDetails(index) {
+      // on click effects
+      this.$refs.content[index].classList.toggle("show-content");
+      this.$refs.image[index].classList.toggle("show-img");
+      
+      // existing hover effects
+      this.$refs.content[index].classList.toggle("group-hover/card:top-[255px]");
+      this.$refs.image[index].classList.toggle("group-hover/card:scale-110");
+      this.$refs.image[index].classList.toggle("group-hover/card:rotate-2");
+    },
+  },
 };
 
 </script>
 
 <style scoped>
 .card-container {
-  @apply flex justify-evenly items-center flex-wrap container mx-auto;
+  @apply flex justify-evenly items-center flex-wrap container mx-auto gap-8 p-4;
 }
 .card {
-  @apply bg-transparent relative rounded-xl rounded-bl-3xl w-[350px] h-[350px]
+  @apply bg-transparent relative rounded-lg rounded-bl-3xl rounded-tr-3xl w-[350px] h-[350px]
   overflow-hidden p-2 shadow-inner shadow-secondary border-2 border-secondary
   transition-all hover:cursor-pointer;
 }
 .card img {
-  @apply h-full w-full object-cover object-center shadow-md shadow-black rounded-xl transition-all;
+  @apply h-full w-full object-cover object-center shadow-md shadow-black rounded-lg rounded-bl-3xl rounded-tr-3xl transition-all;
 }
 .content {
-  @apply absolute top-[300px] left-0 w-full h-full transition-all;
+  @apply absolute top-[300px] left-0 w-full h-full transition-all overflow-hidden;
 }
-.card h1 {
-  @apply text-2xl font-bold text-white w-fit min-w-[175px] bg-secondary-opaque rounded-tr-full 
-  text-center pr-6 pt-2 pb-2;
+.title
+{
+  @apply h-12 px-8 py-2 bg-primary-opaque rounded-tr-full w-fit;
+}
+.title h1 {
+  @apply text-2xl font-bold text-white mx-auto;
 }
 .sub-content {
-  @apply bg-secondary-opaque p-2 h-full;
+  @apply bg-primary-opaque p-2 h-full;
 }
 .tag-list {
-  @apply flex flex-row gap-2 items-start flex-wrap text-white h-14 border-b border-b-secondary;
+  @apply flex flex-row gap-2 items-start flex-wrap text-white h-14 p-2 pt-0;
 }.description {
-  @apply text-sm text-white mx-auto h-[185px] py-1;
+  @apply text-sm text-white mx-auto p-2 h-[170px] mt-1 border-t-2 border-secondary ;
 }
-
-.show {
-  @apply opacity-0;
-  animation: fadeIn 1s ease-in;
+.show-content {
+  @apply top-[50px]
+}
+.show-img {
+  @apply scale-110 rotate-2 blur-[1px];
 }
 </style>
